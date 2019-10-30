@@ -1,4 +1,4 @@
-package no.nav.helse.sparkel.sykepengeperioder
+package no.nav.helse.sparkel.personopplysninger
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -10,9 +10,9 @@ import io.ktor.application.ApplicationStarted
 import io.ktor.application.ApplicationStopping
 import io.ktor.application.log
 import io.ktor.util.KtorExperimentalAPI
-import no.nav.helse.sparkel.sykepengeperioder.serde.JsonNodeSerde
-import no.nav.helse.sparkel.sykepengeperioder.spole.AzureClient
-import no.nav.helse.sparkel.sykepengeperioder.spole.SpoleClient
+import no.nav.helse.sparkel.personopplysninger.serde.JsonNodeSerde
+import no.nav.helse.sparkel.personopplysninger.spole.AzureClient
+import no.nav.helse.sparkel.personopplysninger.spole.SpoleClient
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs

@@ -1,4 +1,4 @@
-package no.nav.helse.sparkel.sykepengeperioder.nais
+package no.nav.helse.sparkel.personopplysninger.nais
 
 import io.ktor.application.Application
 import io.ktor.application.call

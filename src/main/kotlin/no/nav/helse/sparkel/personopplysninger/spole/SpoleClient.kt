@@ -1,6 +1,5 @@
-package no.nav.helse.sparkel.sykepengeperioder.spole
+package no.nav.helse.sparkel.personopplysninger.spole
 
-import arrow.core.Try
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.github.kittinunf.fuel.httpGet

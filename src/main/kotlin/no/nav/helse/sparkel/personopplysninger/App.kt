@@ -1,4 +1,4 @@
-package no.nav.helse.sparkel.sykepengeperioder
+package no.nav.helse.sparkel.personopplysninger
 
 import io.ktor.config.ApplicationConfig
 import io.ktor.config.MapApplicationConfig
@@ -7,7 +7,7 @@ import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.util.KtorExperimentalAPI
-import no.nav.helse.sparkel.sykepengeperioder.nais.nais
+import no.nav.helse.sparkel.personopplysninger.nais.nais
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.concurrent.TimeUnit

@@ -1,4 +1,4 @@
-package no.nav.helse.sparkel.sykepengeperioder.spole
+package no.nav.helse.sparkel.personopplysninger.spole
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.kittinunf.fuel.httpPost

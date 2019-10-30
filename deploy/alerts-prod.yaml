@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Alert
 metadata:
-  name: sparkel-sykepengeperioder-alerts
+  name: sparkel-personopplysninger-alerts
   labels:
     team: tbd
 spec:
@@ -9,10 +9,10 @@ spec:
     slack:
       channel: '#team-bømlo-alerts'
   alerts:
-  - alert: sparkel-sykepengeperioder-har-ingen-aktive-pods
-    expr: up{app=~"sparkel-sykepengeperioder",job="kubernetes-pods"} == 0
+  - alert: sparkel-personopplysninger-har-ingen-aktive-pods
+    expr: up{app=~"sparkel-personopplysninger",job="kubernetes-pods"} == 0
     for: 2m
-    description: sparkel-sykepengeperioder mangler aktive pods i produksjon!
+    description: sparkel-personopplysninger mangler aktive pods i produksjon!
     action: Se `kubectl describe pod {{ $labels.kubernetes_pod_name }}` for events,
       og `kubectl logs {{ $labels.kubernetes_pod_name }}` for logger
     sla: respond within 1h, during office hours
