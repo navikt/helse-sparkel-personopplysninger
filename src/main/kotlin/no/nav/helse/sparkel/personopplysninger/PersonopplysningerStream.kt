@@ -2,6 +2,7 @@ package no.nav.helse.sparkel.personopplysninger
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -11,8 +12,6 @@ import io.ktor.application.ApplicationStopping
 import io.ktor.application.log
 import io.ktor.util.KtorExperimentalAPI
 import no.nav.helse.sparkel.personopplysninger.serde.JsonNodeSerde
-import no.nav.helse.sparkel.personopplysninger.spole.AzureClient
-import no.nav.helse.sparkel.personopplysninger.spole.SpoleClient
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
@@ -28,7 +27,7 @@ import java.io.File
 import java.time.Duration
 import java.util.*
 
-private const val sykepengeperioderBehov = "Sykepengehistorikk"
+private const val personopplysningerBehov = "Personopplysninger "
 private const val behovTopic = "privat-helse-sykepenger-behov"
 
 private val objectMapper = jacksonObjectMapper()
@@ -36,17 +35,7 @@ private val objectMapper = jacksonObjectMapper()
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
 
 @KtorExperimentalAPI
-fun Application.sykepengeperioderApplication(): KafkaStreams {
-
-    val azureClient = AzureClient(
-            tenantUrl = "https://login.microsoftonline.com/" + environment.config.property("azure.tenant_id").getString(),
-            clientId = environment.config.property("azure.client_id").getString(),
-            clientSecret = environment.config.property("azure.client_secret").getString()
-    )
-    val spoleClient = SpoleClient(
-            baseUrl = environment.config.property("spole.url").getString(),
-            accesstokenScope = environment.config.property("spole.scope").getString(),
-            azureClient = azureClient)
+fun Application.personopplysningerApplication(): KafkaStreams {
 
     val builder = StreamsBuilder()
 
@@ -56,7 +45,7 @@ fun Application.sykepengeperioderApplication(): KafkaStreams {
     ).peek { key, value ->
         log.info("mottok melding key=$key value=$value")
     }.filter { _, value ->
-        value.erBehov(sykepengeperioderBehov)
+        value.erBehov(personopplysningerBehov)
     }.filterNot { _, value ->
         value.harLøsning()
     }.filter { _, value ->
@@ -64,14 +53,7 @@ fun Application.sykepengeperioderApplication(): KafkaStreams {
     }.peek { key, value ->
         log.info("løser behov key=$key")
     }.mapValues { _, value ->
-        try {
-            value.setLøsning(lagLøsning(spoleClient, value["aktørId"].textValue()))
-        } catch (err: Exception) {
-            log.error("feil ved henting av spole-data: ${err.message}", err)
-            null
-        }
-    }.filterNot { _, value ->
-        value == null
+        value.setLøsning(lagLøsning("dummy", value["aktørId"].textValue()))
     }.to(behovTopic, Produced.with(Serdes.String(), JsonNodeSerde(objectMapper)))
 
     return KafkaStreams(builder.build(), streamsConfig()).apply {
@@ -93,8 +75,8 @@ private fun JsonNode.erBehov(type: String) =
 private fun JsonNode.harLøsning() =
         has("@løsning")
 
-internal fun lagLøsning(spoleClient: SpoleClient, aktørId: String): JsonNode {
-    return objectMapper.valueToTree(spoleClient.hentSykepengeperioder(aktørId))
+internal fun lagLøsning(tekst: String, aktørId: String): JsonNode {
+    return JsonNodeFactory.instance.textNode("$tekst $aktørId")
 }
 
 private fun JsonNode.setLøsning(løsning: JsonNode) =
