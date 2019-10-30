@@ -50,7 +50,7 @@ fun Application.personopplysningerApplication(): KafkaStreams {
         value.harLøsning()
     }.filter { _, value ->
         value.has("aktørId")
-    }.peek { key, value ->
+    }.peek { key, _ ->
         log.info("løser behov key=$key")
     }.mapValues { _, value ->
         value.setLøsning(lagLøsning("dummy", value["aktørId"].textValue()))
