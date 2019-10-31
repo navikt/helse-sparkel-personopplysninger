@@ -5,7 +5,7 @@ Løser oppslag-behov for andre tjenester i sykepengesfæren.
 
 # Henvendelser
 
-Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub.
+Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub..
 
 ## For NAV-ansatte
 
