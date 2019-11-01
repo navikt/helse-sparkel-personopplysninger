@@ -66,6 +66,10 @@ dependencies {
 
     compile("com.sun.xml.ws:jaxws-rt:2.3.2")
 
+    testImplementation("org.awaitility:awaitility:3.1.6")
+    testImplementation("no.nav:kafka-embedded-env:2.2.3")
+    testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+
 
     testCompile("io.ktor:ktor-server-test-host:$ktorVersion") {
         exclude(group = "junit")
@@ -84,6 +88,8 @@ repositories {
     jcenter()
     mavenCentral()
     maven("https://dl.bintray.com/kotlin/ktor")
+    maven("http://packages.confluent.io/maven/")
+
 }
 
 java {

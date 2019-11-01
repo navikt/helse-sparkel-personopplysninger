@@ -59,6 +59,7 @@ fun createApplicationEnvironment(appConfig: ApplicationConfig) = applicationEngi
     }
 
     module {
+
         val streams = personopplysningerApplication()
         nais(
                 isAliveCheck = { streams.state().isRunning }
