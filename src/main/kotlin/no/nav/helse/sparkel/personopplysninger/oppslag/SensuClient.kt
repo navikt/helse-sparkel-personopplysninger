@@ -1,4 +1,4 @@
-package no.nav.helse.probe
+package no.nav.helse.sparkel.personopplysninger.probe
 
 import org.json.JSONArray
 import org.json.JSONObject

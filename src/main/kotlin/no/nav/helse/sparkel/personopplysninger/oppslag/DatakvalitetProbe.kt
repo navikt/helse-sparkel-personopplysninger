@@ -2,8 +2,8 @@ package no.nav.helse.sparkel.personopplysninger.oppslag
 
 import io.prometheus.client.Counter
 import io.prometheus.client.Histogram
-import no.nav.helse.probe.InfluxMetricReporter
-import no.nav.helse.probe.SensuClient
+import no.nav.helse.sparkel.personopplysninger.probe.InfluxMetricReporter
+import no.nav.helse.sparkel.personopplysninger.probe.SensuClient
 import no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold.Arbeidsavtale
 import no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold.Arbeidsforhold
 import no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold.Permisjon
@@ -122,7 +122,16 @@ class DatakvalitetProbe(sensuClient: SensuClient) {
             sendDatakvalitetEvent(arbeidsforhold, "arbeidsavtale", Observasjonstype.UlikeYrkerForArbeidsforhold, "arbeidsforhold har $ulikeYrkerForArbeidsforhold forskjellige yrkeskoder")
         }
     }
+    fun inspiserFrilans(arbeidsforhold: Arbeidsforhold.Frilans) {
+        sjekkOmStartdatoErStørreEnnSluttdato(arbeidsforhold, "startdato,sluttdato", arbeidsforhold.startdato, arbeidsforhold.sluttdato)
+        sjekkOmDatoErIFremtiden(arbeidsforhold, "sluttdato", arbeidsforhold.sluttdato)
+        sjekkOmFeltErBlank(arbeidsforhold, "yrke", arbeidsforhold.yrke)
+        sjekkArbeidsgiver(arbeidsforhold)
+    }
 
+    fun frilansArbeidsforhold(arbeidsforholdliste: List<Arbeidsforhold.Frilans>) {
+        frilansCounter.inc(arbeidsforholdliste.size.toDouble())
+    }
 
     private fun sjekkArbeidsgiver(arbeidsforhold: Arbeidsforhold) {
         when (arbeidsforhold.arbeidsgiver) {

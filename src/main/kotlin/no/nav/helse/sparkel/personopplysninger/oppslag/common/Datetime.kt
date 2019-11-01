@@ -1,4 +1,4 @@
-package no.nav.helse.common
+package no.nav.helse.sparkel.personopplysninger.common
 
 import java.time.LocalDate
 import java.time.YearMonth

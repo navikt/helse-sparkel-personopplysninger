@@ -1,4 +1,4 @@
-package no.nav.helse.oppslag
+package no.nav.helse.sparkel.personopplysninger.oppslag
 
 import org.apache.cxf.binding.soap.SoapHeader
 import org.apache.cxf.binding.soap.SoapMessage

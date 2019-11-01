@@ -1,8 +1,11 @@
 package no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold
 
-import no.nav.helse.common.toLocalDate
+import no.nav.helse.sparkel.personopplysninger.common.toLocalDate
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Organisasjon
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Person
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.AktoerId
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.ArbeidsforholdFrilanser
+import no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.PersonIdent
 
 import org.slf4j.LoggerFactory
 
@@ -36,6 +39,20 @@ object ArbeidDomainMapper {
                 )
             }
 
+    fun toArbeidsforhold(arbeidsforhold: ArbeidsforholdFrilanser) =
+            when (arbeidsforhold.arbeidsgiver) {
+                is PersonIdent -> Virksomhet.Person((arbeidsforhold.arbeidsgiver as PersonIdent).personIdent)
+                is AktoerId -> Virksomhet.NavAktør((arbeidsforhold.arbeidsgiver as AktoerId).aktoerId)
+                is no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.Organisasjon -> Virksomhet.Organisasjon(Organisasjonsnummer((arbeidsforhold.arbeidsgiver as no.nav.tjeneste.virksomhet.inntekt.v3.informasjon.inntekt.Organisasjon).orgnummer))
+                else -> null
+            }?.let { virksomhet ->
+                Arbeidsforhold.Frilans(
+                        arbeidsgiver = virksomhet,
+                        startdato = arbeidsforhold.frilansPeriode.fom.toLocalDate(),
+                        sluttdato = arbeidsforhold.frilansPeriode?.tom?.toLocalDate(),
+                        yrke = if (arbeidsforhold.yrke?.value.isNullOrBlank()) "UKJENT" else arbeidsforhold.yrke.value
+                )
+            }
 
     fun toArbeidsavtale(arbeidsavtale: no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsavtale) =
             if (arbeidsavtale.tomGyldighetsperiode == null) {
@@ -52,6 +69,4 @@ object ArbeidDomainMapper {
                         tom = arbeidsavtale.tomGyldighetsperiode.toLocalDate()
                 )
             }
-
-
 }

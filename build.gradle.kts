@@ -33,6 +33,7 @@ buildscript {
 fun tjenestespesifikasjon(name: String) = "no.nav.tjenestespesifikasjoner:$name:$tjenestespesifikasjonerVersion"
 
 
+
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("ch.qos.logback:logback-classic:1.2.3")
@@ -59,6 +60,8 @@ dependencies {
     compile("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     compile("javax.activation:activation:1.1.1")
     compile(tjenestespesifikasjon("arbeidsforholdv3-tjenestespesifikasjon"))
+    compile(tjenestespesifikasjon("nav-fim-inntekt-v3-tjenestespesifikasjon"))
+
     compile("no.nav.helse:cxf-prometheus-metrics:dd7d125")
 
     compile("com.sun.xml.ws:jaxws-rt:2.3.2")

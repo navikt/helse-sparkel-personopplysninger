@@ -1,7 +1,6 @@
 package no.nav.helse.sparkel.personopplysninger.oppslag
 
 import no.nav.cxf.metrics.MetricFeature
-import no.nav.helse.oppslag.CallIdInterceptor
 
 import no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold.ArbeidsforholdFactory
 

@@ -1,7 +1,7 @@
 package no.nav.helse.sparkel.personopplysninger.oppslag.arbeidsforhold
 
 import arrow.core.Try
-import no.nav.helse.common.toXmlGregorianCalendar
+import no.nav.helse.sparkel.personopplysninger.common.toXmlGregorianCalendar
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.NorskIdent
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Periode
