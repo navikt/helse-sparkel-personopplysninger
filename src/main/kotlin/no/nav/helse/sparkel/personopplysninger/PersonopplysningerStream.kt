@@ -45,7 +45,7 @@ fun Application.personopplysningerApplication(): KafkaStreams {
     ).peek { key, value ->
         log.info("mottok melding key=$key value=$value")
     }.filter { _, value ->
-        value.erBehov(personopplysningerBehov)
+        value.skalOppfyllesAvOss(personopplysningerBehov)
     }.filterNot { _, value ->
         value.harLøsning()
     }.filter { _, value ->
@@ -69,8 +69,12 @@ fun Application.personopplysningerApplication(): KafkaStreams {
     }
 }
 
-private fun JsonNode.erBehov(type: String) =
-        has("@behov") && this["@behov"].textValue() == type
+private fun JsonNode.skalOppfyllesAvOss(type: String)  =
+        this["@behov"]?.let {
+            if (it.isArray) {
+                it.map { b -> b.asText() }.any { t -> t == type }
+            } else it.asText() == type
+        } ?: false
 
 private fun JsonNode.harLøsning() =
         has("@løsning")
